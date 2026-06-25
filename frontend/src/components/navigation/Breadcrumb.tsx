@@ -15,13 +15,11 @@ export function Breadcrumb(): React.ReactNode {
   const goToBuilding = useNavigationStore((s) => s.goToBuilding);
   const { t } = useTranslation();
 
-  // Hidden in the single office view.
-  if (view === "single") return null;
-
   const hasBuilding = (buildingConfig?.floors.length ?? 0) > 0;
-  // In the Command Center, only show the crumb when there's a building to
-  // return to (otherwise the header COMMAND button is the only entry point).
-  if (view === "command" && !hasBuilding) return null;
+  // Single view + Command Center: only show the crumb when there's a building
+  // to return to (e.g. after drilling into a session from the building/floor
+  // overview). Standalone single mode has nowhere to go back to, so hide it.
+  if ((view === "single" || view === "command") && !hasBuilding) return null;
 
   const isCommand = view === "command";
   const isLobby = floorId === LOBBY_FLOOR_ID;
